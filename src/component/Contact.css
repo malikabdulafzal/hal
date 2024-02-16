@@ -1,0 +1,101 @@
+@font-face {
+  font-family: "Poppins-Regular";
+  src: local("Poppins-Regular"),
+    url(./Fonts/Poppins/Poppins-Regular.ttf) format("truetype");
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  font-family: Poppins-Regular, Arial, serif;
+  /* box-sizing: border-box; */
+}
+
+.contact-container {
+  text-align: center;
+  border: 1px solid blueviolet;
+  height: 500px;
+  width: 100%;
+  /* background-image: url("./assets/hire.png"); */
+  display: flex;
+
+  border-radius: 10px;
+  overflow: hidden;
+}
+.contact-child {
+  display: flex;
+  flex-direction: column;
+  row-gap: 16px;
+}
+.half-container {
+  width: 50%;
+}
+.img2 {
+  width: auto;
+  height: 100%;
+}
+.center {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+.imgcolor {
+  background-color: #d7d6d0;
+}
+.input-field {
+  width: 80%;
+  padding: 5px;
+  margin: 10px 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  transition: border-color 0.3s;
+  border: 1px solid blueviolet;
+  border-radius: 10px;
+  height: 32px;
+}
+
+.textarea-field {
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  resize: none; /* Prevent textarea resizing */
+  transition: border-color 0.3s;
+  border: 1px solid blueviolet;
+  margin-top: 10px;
+  height: 96px;
+}
+.sbmt-btn {
+  width: 80%;
+  padding: 12px;
+  text-transform: uppercase;
+  font-weight: bold;
+  letter-spacing: 2px;
+  border-radius: 28px;
+  color: white;
+  background-color: blueviolet;
+  margin-top: 2px;
+  cursor: pointer;
+
+  font-size: 20px;
+  align-self: center;
+  border: 0px;
+}
+.text-16 {
+  font-size: 20px;
+  font-family: Poppins-Regular;
+}
+/* section {
+  width: 100vw;
+  height: 100vh;
+} */
+.main-section {
+  height: 100vh;
+  width: 100vw;
+  /* border: 1px solid green; */
+  padding: 48px;
+  display: flex;
+  align-items: center;
+}
