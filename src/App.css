@@ -1,0 +1,68 @@
+@font-face {
+  font-family: "Poppins-Regular";
+  src: local("Poppins-Regular"),
+    url(./Fonts/Poppins/Poppins-Regular.ttf) format("truetype");
+}
+body {
+  margin: 0px;
+  padding: 0px;
+
+  /* background-color: #ffffff !important; */
+  font-family: Poppins-Regular, Arial, serif;
+  font-weight: black;
+  --bs-table-border-color: #e9ecef;
+  width: 100vw;
+  height: 100vh;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Oswald:wght@200;300;400;500;600;700&display=swap");
+
+:root {
+  --primary-bg-white-color: #f4f4f4;
+
+  --primary-bg-color: #141a2a;
+  --secondary-bg-color: #bcdcff;
+  --tertiary-bg-color: #deedff;
+
+  --secondary-placehoder-color: #bcdcff83;
+  --white-75-color: #e9eaeb;
+  --black-75-color: rgb(65, 68, 77);
+
+  --black-text-color: #202533;
+  --black-75-text-color: #2025338a;
+  --white-50-text-color: #c7c8cc;
+  --white-black-text-color: #f3f4f6;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Lato", "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",
+    "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: var(--primary-bg-white-color);
+}
+
+.fc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fcc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+html {
+  font-size: 14px;
+  /* line-height: 30px; */
+}

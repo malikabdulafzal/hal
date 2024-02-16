@@ -1,0 +1,20 @@
+.about-us__container {
+  /* padding: 10px 0; */
+  /* width: 100%; */
+}
+
+.about-us__section {
+  /* background-color: var(--primary-bg-color); */
+  background-color: rgba(137, 43, 226, 0.39);
+
+  padding: 180px 70px;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.about-us__section > h3 {
+  font-size: 24px;
+}
+.about-us__section > p {
+  font-size: 16px;
+}

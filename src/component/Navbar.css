@@ -1,0 +1,79 @@
+* {
+  box-sizing: border-box;
+}
+.body-nav {
+  background-color: rgb(255, 255, 255);
+  /* z-index: -5; */
+  /* position: absolute; */
+}
+.NavbarContainer {
+  /* border: 1px solid red; */
+  display: flex;
+  width: 100%;
+  height: 8vh;
+  justify-content: space-between;
+  gap: 68px;
+  padding: 8px 16px;
+  background-color: rgb(255, 255, 255);
+  align-items: center;
+  margin-bottom: 1vh;
+}
+
+.nameContainer {
+  white-space: nowrap;
+  /* margin-top: 8px; */
+}
+.name {
+  font-size: 20px;
+  font-weight: bold;
+  color: blueviolet;
+}
+
+.itemsContainer {
+  display: flex;
+  flex-direction: row;
+  /* width: 100%; */
+  gap: 150px;
+  align-items: center;
+}
+.item {
+  /* width: 10%; */
+  text-align: center;
+  white-space: nowrap;
+  text-decoration: none;
+
+  /* background-color: red; */
+}
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  /* width: 224px; */
+  gap: 30px;
+}
+.sign-btn {
+  /* margin: 10px 0px; */
+  border-radius: 15px;
+  width: 95px;
+  height: 28px;
+  cursor: pointer;
+}
+.sign-btn1 {
+  border: 1px solid blueviolet;
+  background-color: rgba(255, 255, 255, 0.661);
+  color: blueviolet;
+}
+.sign-btn2 {
+  background-color: transparent;
+  color: white;
+  border: 1px solid blueviolet;
+}
+
+a {
+  color: blueviolet;
+  font-size: 15px;
+  font-weight: bolder;
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 5;
+}

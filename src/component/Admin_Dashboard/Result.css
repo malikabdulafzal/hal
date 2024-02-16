@@ -1,0 +1,67 @@
+.hr_dashboard__container {
+  width: 95%;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+  gap: 2.5vh;
+
+  margin: 2.5%;
+  padding: 2.5%;
+  border: solid #aa60c7;
+}
+.hr_dashboard__chart-container {
+  width: 90%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.hr_dashboard__pie-chart {
+  width: 30vw;
+  height: 40vh;
+
+  margin: 5vh 5vw;
+  display: flex;
+}
+.hr_dashboard__bar-chart {
+  width: 30vw;
+  height: 40vh;
+
+  margin: 5vh 5vw;
+  display: flex;
+}
+
+.pretty-table-container {
+  overflow-x: auto;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pretty-table {
+  /* width: 80vw; */
+  border-collapse: collapse;
+}
+
+.pretty-table th,
+.pretty-table td {
+  padding: 8px;
+  border: 1px solid #dddddd;
+  text-align: left;
+
+  width: 20vw;
+}
+
+.pretty-table th {
+  background-color: #f2f2f2;
+}
+
+.pretty-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.pretty-table tbody tr:hover {
+  background-color: #f2f2f2;
+}
