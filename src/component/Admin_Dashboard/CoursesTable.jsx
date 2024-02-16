@@ -14,7 +14,7 @@ import editIcon from "../../assets/edit.svg";
 import Cropperr from "./Cropperr";
 
 import axios from "axios";
-import { Url } from "./../../serverUrl";
+import { baseUrl } from "./../../serverUrl";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -49,29 +49,35 @@ const CoursesTable = () => {
   const [quizList, setQuizList] = React.useState(false);
   const [add, setAdd] = React.useState(false);
   const [edit, setEdit] = React.useState(false);
+  const [newCourse, setNewCourse] = React.useState({});
 
   const toggleModalAdd = () => {
     // setBlur(!blur);
     setAdd(!add);
   };
 
-  const toggleModalEdit = () => {
+  const toggleModalEdit = (courseId) => {
     setBlur(!blur);
     setEdit(!edit);
+    setCourseId(courseId);
   };
-  const toggleModalQuestionType = () => {
+  const toggleModalQuestionType = (courseId) => {
     console.log("the value of blur", blur);
     console.log("the value of questionType", questionType);
+    console.log("courseId", courseId);
+    setCourseId(courseId);
 
     setBlur(!blur);
     setQuestionType(!questionType);
     console.log("After blur", blur);
     console.log("After questionType", questionType);
   };
-  const toggleModalQuizList = (value) => {
+  const toggleModalQuizList = (value, quizData) => {
+    console.log("quiz data:", quizData);
     setBlur(!blur);
     setQuizList(!quizList);
     setName(value);
+    setQuizData(quizData);
   };
 
   const inputArr = [
@@ -80,7 +86,7 @@ const CoursesTable = () => {
     },
   ];
 
-  const [arr, setArr] = useState(inputArr);
+  const [optionArray, setOptionArray] = useState(inputArr);
   const [text, settext] = useState("");
   const [courseName, setCourseName] = useState("");
   const [croppedImage, setCroppedImage] = useState(null);
@@ -90,7 +96,7 @@ const CoursesTable = () => {
   };
 
   const addInput = () => {
-    setArr((oldState) => [
+    setOptionArray((oldState) => [
       ...oldState,
       {
         value: `option${oldState.length + 1}`,
@@ -101,7 +107,7 @@ const CoursesTable = () => {
   const handleChange = (e) => {
     e.preventDefault();
     const index = e.target.id;
-    setArr((s) => {
+    setOptionArray((s) => {
       const newArr = s.slice();
       newArr[index].value = e.target.value;
       return newArr;
@@ -109,14 +115,14 @@ const CoursesTable = () => {
   };
   const data = [
     {
-      courses: "OOP",
+      courseName: "OOP",
       status: "online",
       add_quiz: "+",
       Added_Date: "22/12/2024",
       Edit: "edit",
     },
     {
-      courses: "DSA",
+      courseName: "DSA",
       status: "offline",
       add_quiz: "+",
 
@@ -124,7 +130,7 @@ const CoursesTable = () => {
       Edit: "edit",
     },
     {
-      courses: "DBMS",
+      courseName: "DBMS",
       status: "offline",
       add_quiz: "+",
       Added_Date: "22/12/2024",
@@ -152,47 +158,40 @@ const CoursesTable = () => {
 
   const handleAddNewCourse = async () => {
     let base64;
-    const response1 = await axios.get(croppedImage, { responseType: "blob" });
-    // .then((response) => {
-    // Extract the Blob object from the response
-    // blob = response.data;
-    // Use the retrieved Blob object as neededrawfile
-    // convertfiletobase64(blob).then(console.log("64:", response.data));
-    // console.log("Retrieved Blob:", blob);
-    let reader = new FileReader();
-    reader.readAsDataURL(response1.data);
-    reader.onloadend = function () {
-      let base64String = reader.result;
-      console.log("Base64 String - ", base64String);
+    // const response1 = await axios.get(croppedImage, { responseType: "blob" });
 
-      // Simply Print the Base64 Encoded String,
-      // without additional data: Attributes.
-      console.log(
-        "Base64 String without Tags- ",
-        base64String.substr(base64String.indexOf(", ") + 1)
-      );
-    };
+    // let reader = new FileReader();
+    // reader.readAsDataURL(response1.data);
+    // reader.onloadend = function () {
+    //   let base64String = reader.result;
+    // };
 
     try {
       const token = localStorage.getItem("token");
 
-      const newFile = await readFile(response1.data);
+      // const newFile = await readFile(response1.data);
       const formData = new FormData();
-      formData.append("photo", newFile);
+      // formData.append("photo", newFile);
       formData.append("courseName", courseName);
-      console.log("newFileUrl:", newFile, formData, courseName);
+      console.log("newFileUrl:", formData, courseName);
 
-      const response = await axios.post(`${Url}api/v1/admins/course`, {
-        headers: {
-          "Content-Type": "multipart/form-data", // Set content type to multipart/form-data
-          Authorization: `Bearer ${token}`, // Include bearer token in the header
-        },
-        data: formData,
-      });
+      const response = await axios.post(
+        `${baseUrl}api/v1/admins/course`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-      // Handle success
       console.log("Response:", response.data);
       if (response.status === 201) {
+        setCourses((prevCourses) => [
+          ...prevCourses,
+          response.data.data.course,
+        ]);
         toast.success("Course added");
         toggleModalAdd();
       }
@@ -203,6 +202,68 @@ const CoursesTable = () => {
       console.log("Error:", error);
     }
   };
+  const handleAddQuizToCourse = async () => {
+    toggleModalQuestionType();
+    try {
+      const token = localStorage.getItem("token");
+
+      const data = {
+        question: newQuestion,
+        option: optionArray.map((element) => element.value),
+        correctOption: correctOption,
+        type: selectValue,
+      };
+      console.log("api data add quiz:", data);
+      const response = await axios.post(
+        `${baseUrl}api/v1/admins/course/${courseId}/quiz`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Response:", response.data);
+      if (response.status === 201) {
+        // setCourses((prevCourses) => [
+        //   ...prevCourses,
+        //   response.data.data.course,
+        // ]);
+        toast.success("Quiz added");
+        // toggleModalAdd();
+      }
+    } catch (error) {
+      if (error?.response?.status === 400) {
+        toast.error(error.response.data.message);
+      }
+      console.log("Error:", error);
+    }
+  };
+
+  const [courses, setCourses] = React.useState([]);
+  const [newQuestion, setNewQuestion] = React.useState([]);
+  const [correctOption, setCorrectOption] = React.useState([]);
+  const [courseId, setCourseId] = React.useState("");
+  const [quizData, setQuizData] = React.useState([]);
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        const response = await axios.get(`${baseUrl}api/v1/admins/course`);
+        console.log("admin course response:", response.data.data.course);
+        setCourses(response.data.data.course); // Assuming response.data is an array of courses
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -212,7 +273,7 @@ const CoursesTable = () => {
           <div>
             <img src={AddIconWhite} alt="" />
           </div>
-          New Courses
+          New Courses;
         </button>
       </div>
       <div>
@@ -228,16 +289,16 @@ const CoursesTable = () => {
 
             <th className="table-head-typo"> Edit</th>
             {/* </tr> */}
-            {data.map((val, key) => {
+            {courses.map((val, key) => {
               return (
                 <tr key={key}>
                   <td className="text-align-left">
-                    <span className="course-typo ">{val.courses}</span>
+                    <span className="course-typo ">{val.courseName}</span>
                   </td>
 
                   <td>
                     <span className="status-typo online p-4-12">
-                      {val.status}
+                      {val.status ? "online" : "offline"}
                     </span>
                   </td>
                   <td className="add-view-icon">
@@ -245,16 +306,20 @@ const CoursesTable = () => {
                     <img
                       src={AddIcon}
                       alt="for add"
-                      onClick={toggleModalQuestionType}
+                      onClick={() => toggleModalQuestionType(val._id)}
                     />
                     <img
                       src={viewIcon}
                       alt="for view"
-                      onClick={() => toggleModalQuizList(val.courses)}
+                      onClick={() =>
+                        toggleModalQuizList(val.courseName, val.quiz)
+                      }
                     />
                   </td>
                   <td className="text-align-left">
-                    <span className="date-typo ">{val.Added_Date}</span>
+                    <span className="date-typo ">
+                      {new Date(val.Added_Date).toLocaleDateString()}
+                    </span>
                   </td>
 
                   <td>
@@ -264,7 +329,7 @@ const CoursesTable = () => {
                     <img
                       src={editIcon}
                       alt="for view"
-                      onClick={toggleModalEdit}
+                      onClick={() => toggleModalEdit(val._id, val.courseName)}
                     />
                   </td>
                 </tr>
@@ -279,38 +344,42 @@ const CoursesTable = () => {
           <img
             src={crossIcon}
             alt="for cross"
-            onClick={() => toggleModalQuizList()}
+            onClick={() => toggleModalQuizList(null, [])}
           />
         </div>
         <div className="quizList-container">
-          {DateSetQuiz.map((Element, index) => {
-            return Element.type === "short" ? (
-              <div className="quizlist-shortpart">
-                <span>{`${index + 1}. ${Element.question}`}</span>
-                <span>Your Answer</span>
-                <hr />
-              </div>
-            ) : (
-              <div className="quizlist-mcqspart">
-                <span>{`${index + 1}. ${Element.question}`}</span>
-                {Element.option.map((Element2, index2) => {
-                  return (
-                    <div className="option-part">
-                      <img
-                        src={
-                          Element.correctOption === index2 + 1
-                            ? fillIcon
-                            : circleIcon
-                        }
-                        alt="for options"
-                      />
-                      <span>{Element2}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            );
-          })}
+          {quizData.length > 0 ? (
+            quizData.map((Element, index) => {
+              return Element.type === "short" ? (
+                <div className="quizlist-shortpart">
+                  <span>{`${index + 1}. ${Element.question}`}</span>
+                  <span>Your Answer</span>
+                  <hr />
+                </div>
+              ) : (
+                <div className="quizlist-mcqspart">
+                  <span>{`${index + 1}. ${Element.question}`}</span>
+                  {Element.option.map((Element2, index2) => {
+                    return (
+                      <div className="option-part">
+                        <img
+                          src={
+                            Element.correctOption === index2 + 1
+                              ? fillIcon
+                              : circleIcon
+                          }
+                          alt="for options"
+                        />
+                        <span>{Element2}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })
+          ) : (
+            <span>no quiz added</span>
+          )}
         </div>
       </div>
       <div className={`add-modal-parent ${!questionType && "hidden"} `}>
@@ -325,6 +394,7 @@ const CoursesTable = () => {
                     type="text"
                     placeholder="Enter your question"
                     className="mk-qts "
+                    onChange={(e) => setNewQuestion(e.target.value)}
                   />
                 </div>
                 <hr />
@@ -341,13 +411,15 @@ const CoursesTable = () => {
               >
                 <div>
                   <input
+                    name="newQuestion"
                     type="text"
                     placeholder="Enter your question"
                     className="mk-qts "
+                    onChange={(e) => setNewQuestion(e.target.value)}
                   />
                 </div>
                 <div>
-                  {arr.map((item, i) => (
+                  {optionArray.map((item, i) => (
                     <input
                       key={i}
                       onChange={handleChange}
@@ -365,6 +437,20 @@ const CoursesTable = () => {
                     Add option
                   </button>
                 </div>
+                <div className="add-option-container">
+                  {optionArray.length > 0 && (
+                    <div>
+                      <span for="correctAnser">correct answer</span>
+                      <input
+                        name="correctAnser"
+                        onChange={(e) => setCorrectOption(e.target.value)}
+                        type="number"
+                        min={1}
+                        max={optionArray.length}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
@@ -376,7 +462,7 @@ const CoursesTable = () => {
             </div>
 
             <select
-              id="cars"
+              id="type"
               className="qts-select"
               onChange={(e) => handleSelect(e.target.value)}
             >
@@ -387,12 +473,20 @@ const CoursesTable = () => {
         </div>
         <div className="row">
           <div className="submit-btn-container">
-            <button onClick={toggleModalQuestionType} className="submit-btn">
+            <button
+              onClick={() => toggleModalQuestionType()}
+              className="submit-btn"
+            >
               Cancel
             </button>
           </div>
           <div className="submit-btn-container">
-            <button className="submit-btn">Submit</button>
+            <button
+              className="submit-btn"
+              onClick={() => handleAddQuizToCourse()}
+            >
+              Submit
+            </button>
           </div>
         </div>
       </div>

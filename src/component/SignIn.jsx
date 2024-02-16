@@ -41,33 +41,33 @@ const SignIn = () => {
     }
   };
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   console.log("url:", URL);
-  //   try {
-  //     const response = await axios.post(`${URL}api/v1/admins/login`, {
-  //       email,
-  //       password,
-  //     });
-  //     if (response.status === 200) {
-  //       // token store in local storage
-  //       toast.success("Login Successful");
-  //       const token = response.data.token;
-  //       const user = response.data.data.user;
-  //       localStorage.setItem("token", token);
-  //       localStorage.setItem("user", JSON.stringify(user));
-  //       navigate("/Dashboard");
-  //     }
-  //     console.log("login Successful", response.data);
-  //   } catch (error) {
-  //     toast.error("Login Failed");
-  //     if (error.response.status === 401) {
-  //       toast.warn(error.response.data.message);
-  //     }
-  //     console.log("Registration Failed", error.response, error.message);
-  //     // Handle  failure, such as showing error messages
-  //   }
-  // };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log("url:", URL);
+    try {
+      const response = await axios.post(`${URL}api/v1/admins/login`, {
+        email,
+        password,
+      });
+      if (response.status === 200) {
+        // token store in local storage
+        toast.success("Login Successful");
+        const token = response.data.token;
+        const user = response.data.data.user;
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
+        navigate("/Dashboard");
+      }
+      console.log("login Successful", response.data);
+    } catch (error) {
+      toast.error("Login Failed");
+      if (error.response.status === 401) {
+        toast.warn(error.response.data.message);
+      }
+      console.log("Registration Failed", error.response, error.message);
+      // Handle  failure, such as showing error messages
+    }
+  };
 
   return (
     <>
@@ -76,7 +76,7 @@ const SignIn = () => {
         <div className="container-signin">
           <Name />
           <div className="form-container-parent">
-            <form className="form-container">
+            <form className="form-container" onSubmit={handleSubmit}>
               <span className="welcome-text">Welcome!</span>
               <div>
                 <span className="sign-in-text">Sign in to HR </span>
@@ -113,11 +113,11 @@ const SignIn = () => {
                   <div className="error-message">{passwordError}</div>
                 )}
               </div>
-              <Link to="/Dashboard">
-                <button type="submit" className="btn-siginin">
-                  Login
-                </button>
-              </Link>
+              {/* <Link to="/Dashboard"> */}
+              <button type="submit" className="btn-siginin">
+                Login
+              </button>
+              {/* </Link> */}
               <div className="forgotClass">
                 <div className="checBoxDiv">
                   <input type="checkbox" />

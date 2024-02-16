@@ -62,28 +62,26 @@ const App = () => {
 };
 
 const PrivateRoutesHR = () => {
-  // const navigate = useNavigate();
-  // const storedToken = localStorage.getItem("token");
-  // console.log("in privateRoutes boolean", Boolean(storedToken));
-  // let auth = { token: Boolean(storedToken) };
-  // if (!auth.token) {
-  //   toast.warn("Please login or Signup");
-  //   navigate("/");
-  // }
-  // return auth.token ? <Dashboard /> : <Home />;
-  return <Dashboard />;
+  const navigate = useNavigate();
+  const storedToken = localStorage.getItem("token");
+  console.log("in privateRoutes boolean", Boolean(storedToken));
+  let auth = { token: Boolean(storedToken) };
+  if (!auth.token) {
+    toast.warn("Please login or Signup");
+    navigate("/");
+  }
+  return auth.token ? <Dashboard /> : <Home />;
 };
 const PrivateRoutesCandidate = () => {
-  // const navigate = useNavigate();
-  // const storedToken = localStorage.getItem("token");
-  // console.log("in privateRoutes boolean", Boolean(storedToken));
-  // let auth = { token: Boolean(storedToken) };
-  // if (!auth.token) {
-  //   toast.warn("Please login or Signup");
-  //   navigate("/");
-  // }
-  // return auth.token ? <CandidateDashboard /> : <Home />;
-  return <CandidateDashboard />;
+  const navigate = useNavigate();
+  const storedToken = localStorage.getItem("token");
+  console.log("in privateRoutes boolean", Boolean(storedToken));
+  let auth = { token: Boolean(storedToken) };
+  if (!auth.token) {
+    toast.warn("Please login or Signup");
+    navigate("/");
+  }
+  return auth.token ? <CandidateDashboard /> : <Home />;
 };
 
 const Home = () => {

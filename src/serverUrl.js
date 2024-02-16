@@ -1,4 +1,5 @@
-const URL = "http://192.168.0.1g501:3000/";
-const Url = "http://192.168.0.10vd1:3000/";
+const URL = "http://192.168.0.101:3000/";
+const Url = URL;
+const baseUrl = URL;
 
-export { Url, URL };
+export { Url, URL, baseUrl };

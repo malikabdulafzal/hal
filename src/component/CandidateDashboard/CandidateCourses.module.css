@@ -1,6 +1,8 @@
 .container {
   display: flex;
   gap: 30px;
+  flex-wrap: wrap;
+  overflow-y: scroll;
 }
 
 .cardParent {

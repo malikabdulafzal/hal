@@ -7,6 +7,10 @@ import fillIcon from "../../assets/fill.svg";
 import editIcon from "../../assets/edit.svg";
 import AddIconWhite from "../../assets/addWhite.svg";
 import "./TestTable.css";
+import axios from "axios";
+import { baseUrl } from "./../../serverUrl";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import { data, coursesData } from "../../dataset";
 
@@ -24,6 +28,8 @@ const TestTable = () => {
   const [edit, setEdit] = React.useState(false);
   const [blur, setBlur] = useState(false);
   const [text, settext] = useState("");
+  const [testName, setTestName] = useState("");
+  const [courseIdArray, setCourseIdArray] = useState([]);
   const toggleModalQuizList = (value, quizArray) => {
     // console.log("abudl", value);
     setBlur(!blur);
@@ -133,6 +139,67 @@ const TestTable = () => {
     setEndTime(event.target.value);
   }
 
+  const handleAddTest = async () => {
+    // toggleModalQuestionType();
+    try {
+      const token = localStorage.getItem("token");
+
+      const data = {
+        test: testName,
+        status: true,
+        courseId: courseIdArray,
+        start_time: startTime,
+        end_time: endTime,
+      };
+      console.log("api data add quiz:", data);
+      const response = await axios.post(
+        `${baseUrl}api/v1/admins/course/${courseId}/quiz`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      console.log("Response:", response.data);
+      if (response.status === 201) {
+        // setCourses((prevCourses) => [
+        //   ...prevCourses,
+        //   response.data.data.course,
+        // ]);
+        toast.success("Quiz added");
+        // toggleModalAdd();
+      }
+    } catch (error) {
+      if (error?.response?.status === 400) {
+        toast.error(error.response.data.message);
+      }
+      console.log("Error:", error);
+    }
+  };
+  const [courses, setCourses] = React.useState([]);
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+
+        const response = await axios.get(`${baseUrl}api/v1/admins/course`);
+        console.log(
+          "in test admin course response:",
+          response.data.data.course
+        );
+        setCourses(response.data.data.course); // Assuming response.data is an array of courses
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className={`${blur && "course-blur"}`}></div>
@@ -207,14 +274,14 @@ const TestTable = () => {
               type="text"
               placeholder="Enter Test Name"
               className="add_course_input"
-              value={text}
-              onChange={(e) => settext(e.target.value)}
+              value={testName}
+              onChange={(e) => setTestName(e.target.value)}
             ></input>
             <hr />
           </div>
           <div>
             <label for="startTime">Select Courses:</label>
-            {coursesData.map((val, key) => {
+            {courses.map((val, key) => {
               console.log("the value of val", val);
 
               return (
@@ -234,7 +301,7 @@ const TestTable = () => {
                       type="number"
                       min="1"
                       value={totalMarks[key]}
-                      max={val.quizes.length}
+                      max={val.quiz.length}
                       onChange={(e) => handlertotalMarks(e, key)}
                       {...console.log(
                         "value of check",
