@@ -1,0 +1,16 @@
+@font-face {
+  font-family: "Poppins-Regular";
+  src: local("Poppins-Regular"),
+    url(./Fonts/Poppins/Poppins-Regular.ttf) format("truetype");
+}
+body {
+  margin: 0px;
+  padding: 0px;
+
+  background-color: #f8f9fa !important;
+  font-family: Poppins-Regular, Arial, serif;
+  font-weight: black;
+  --bs-table-border-color: #e9ecef;
+  width: 100vw;
+  height: 100vh;
+}
